@@ -1,26 +1,63 @@
-import { Progress } from "@/components/ui/progress";
-import { AlarmClock, Trophy } from "lucide-react";
+"use client";
+import { Trophy } from "lucide-react";
 import {
   Card,
   CardContent,
-  CardHeader,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import Image from "next/image";
-import { Input } from "@/components/ui/input";
 import AnswerForm from "@/components/answer-form";
+import { useEffect, useRef, useState } from "react";
+import { Timer, TimerRef } from "@/components/timer";
+import z from "zod";
+import { answerSchema } from "@/lib/validation/answerSchema";
 
 export default function Game() {
+  const [points, setPoints] = useState<number>(0);
+  const [phase, setPhase] = useState<string>("");
+  const [label, setLabel] = useState("Timer");
+  const timerRef = useRef<TimerRef>(null);
+
+  const startGame = () => {
+    setPoints(0);
+    startRound();
+  }
+
+  const startRound = () => {
+    generateCategory();
+    setPhase("roundStart");
+    timerRef.current?.start(10);
+  }
+
+  const generateCategory = () => {
+    
+  }
+
+  const handleStopTimer = () => {
+    timerRef.current?.stop();
+  }
+
+  const handleTimerComplete = () => {
+    console.log("Timer completed!")
+  }
+  
+  const handleSubmit = (data: z.infer<typeof answerSchema>) => {
+    handleStopTimer();
+  }
+
+  useEffect(() => {
+    startGame();
+  }, []);
+
   return (
     <main className="flex flex-col gap-3 container mx-auto px-3 pt-20 md:px-6">
       <section className="flex justify-between items-center">
         <div className="flex gap-3 p-3 bg-primary text-primary-foreground rounded-md"><Trophy /> Score: 0</div>
-        <div className="flex gap-3 items-center">
-          <AlarmClock />
-          <div className="w-20 sm:w-40 md:w-60">
-            <p>10s</p>
-            <Progress value={33} />
-          </div>
-        </div>
+        <Timer
+          ref={timerRef}
+          label={label}
+          onComplete={handleTimerComplete}
+          className="justify-center"
+        />
       </section>
       <Card className="flex flex-col items-center">
         <CardContent className="flex flex-col items-center text-center">
@@ -29,7 +66,7 @@ export default function Game() {
           <h1 className="text-4xl font-bold">Category: Name a color</h1>
         </CardContent>
       </Card>
-      <AnswerForm />
+      <AnswerForm onSubmit={handleSubmit} />
     </main>
   );
 }

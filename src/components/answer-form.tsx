@@ -5,22 +5,15 @@ import { z } from "zod"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { answerSchema } from "@/lib/validation/answerSchema";
 
-const answerSchema = z.object({
-  answer: z.string().min(1, {
-    message: "Answer must have a value.",
-  }),
-})
-
-export default function AnswerForm() {
+export default function AnswerForm({onSubmit}: {onSubmit: () => void}) {
 
   const form = useForm<z.infer<typeof answerSchema>>({
     resolver: zodResolver(answerSchema),
@@ -28,10 +21,6 @@ export default function AnswerForm() {
       answer: "",
     },
   })
-
-  function onSubmit(values: z.infer<typeof answerSchema>) {
-    console.log(values)
-  }
 
   return (
     <Form {...form}>
