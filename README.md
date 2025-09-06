@@ -1,6 +1,6 @@
 # Don't Say The Same Thing As Me
 
-This is a fun and interactive web-based game built with Next.js, Drizzle ORM, Neon, and Clerk for authentication. The goal of the game is to provide unique answers to prompts without repeating what computer have said.
+This is a fun and interactive web-based game built with Next.js, Drizzle ORM, Neon, and OpenAI. The goal of the game is to provide unique answers to prompts without repeating what computer have said.
 
 ## Features
 
