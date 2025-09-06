@@ -4,10 +4,10 @@ This is a fun and interactive web-based game built with Next.js, Drizzle ORM, Ne
 
 ## Features
 
-*   **Real-time Gameplay:** Compete with other players in real-time.
-*   **Unique Answers:** Challenge your creativity by providing answers that no one else has submitted.
+*   **Unique Answers:** Challenge your creativity by providing unique answers.
 *   **Leaderboard:** See how you stack up against other players.
 *   **Database:** Powered by Neon with Drizzle ORM for type-safe database interactions.
+*   **Artificial Intelligence:** Powered by OpenAI for AI-powered content generation and checking.
 
 ## Technologies Used
 
@@ -48,7 +48,7 @@ Before running this project, you will need:
 
 3.  **Set up environment variables:**
 
-    Create a `.env.local` file in the root of your project and add the following:
+    Create a `.env` file in the root of your project and add the following:
 
     ```env
     DATABASE_URL="YOUR_NEON_DATABASE_URL"
@@ -60,9 +60,9 @@ Before running this project, you will need:
 4.  **Run database migrations:**
 
     ```bash
-    npm run db:push
+    npx drizzle-kit push
     # or
-    yarn db:push
+    yarn drizzle-kit push
     ```
 
 5.  **Start the development server:**
