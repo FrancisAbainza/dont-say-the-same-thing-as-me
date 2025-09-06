@@ -1,36 +1,84 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Don't Say The Same Thing As Me
+
+This is a fun and interactive web-based game built with Next.js, Drizzle ORM, Neon, and Clerk for authentication. The goal of the game is to provide unique answers to prompts without repeating what computer have said.
+
+## Features
+
+*   **Real-time Gameplay:** Compete with other players in real-time.
+*   **Unique Answers:** Challenge your creativity by providing answers that no one else has submitted.
+*   **Leaderboard:** See how you stack up against other players.
+*   **Database:** Powered by Neon with Drizzle ORM for type-safe database interactions.
+
+## Technologies Used
+
+*   [Next.js](https://nextjs.org/): React framework for building full-stack web applications.
+*   [Drizzle ORM](https://orm.drizzle.team/): TypeScript ORM for Neon.
+*   [Neon](https://neon.tech/): Serverless PostgreSQL.
+*   [OpenAI](https://openai.com/): For AI-powered features.
+*   [Tailwind CSS](https://tailwindcss.com/): Utility-first CSS framework.
+*   [shadcn/ui](https://ui.shadcn.com/): Reusable UI components.
+*   [Vercel](https://vercel.com/): Platform for frontend frameworks and static sites.
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Before running this project, you will need:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+*   Node.js (LTS recommended)
+*   npm or yarn
+*   A Neon account and PostgreSQL database
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Installation
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1.  **Clone the repository:**
 
-## Learn More
+    ```bash
+    git clone https://github.com/FrancisAbainza/dont-say-the-same-thing-as-me.git
+    cd dont-say-the-same-thing-as-me
+    ```
 
-To learn more about Next.js, take a look at the following resources:
+2.  **Install dependencies:**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+    ```bash
+    npm install
+    # or
+    yarn install
+    ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3.  **Set up environment variables:**
 
-## Deploy on Vercel
+    Create a `.env.local` file in the root of your project and add the following:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+    ```env
+    DATABASE_URL="YOUR_NEON_DATABASE_URL"
+    OPENAI_API_KEY="YOUR_OPENAI_API_KEY"
+    ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+    Replace the placeholder values with your actual Neon database URL and OpenAI API key.
+
+4.  **Run database migrations:**
+
+    ```bash
+    npm run db:push
+    # or
+    yarn db:push
+    ```
+
+5.  **Start the development server:**
+
+    ```bash
+    npm run dev
+    # or
+    yarn dev
+    ```
+
+    Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
+
+## Contributing
+
+Contributions are welcome! Please feel free to open an issue or submit a pull request.
+
+## License
+
+This project is licensed under the MIT License.
