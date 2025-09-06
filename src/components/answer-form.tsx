@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { answerSchema } from "@/lib/validation/answerSchema";
 
-export default function AnswerForm({onSubmit}: {onSubmit: () => void}) {
+export default function AnswerForm({onSubmit}: {onSubmit: (data: z.infer<typeof answerSchema>) => void}) {
 
   const form = useForm<z.infer<typeof answerSchema>>({
     resolver: zodResolver(answerSchema),
@@ -24,7 +24,7 @@ export default function AnswerForm({onSubmit}: {onSubmit: () => void}) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex gap-3 justify-center pt-20 space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex gap-3 justify-center space-y-8">
         <FormField
           control={form.control}
           name="answer"

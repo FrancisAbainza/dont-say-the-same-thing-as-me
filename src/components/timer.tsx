@@ -6,24 +6,23 @@ import { Progress } from "@/components/ui/progress"
 import { cn } from "@/lib/utils"
 
 export interface TimerRef {
-  start: (duration?: number) => void
+  start: (duration?: number, onComplete?: () => void) => void
   stop: () => void
 }
 
 interface TimerProps {
   className?: string
   label?: string
-  onComplete?: () => void
-  onTick?: (remainingTime: number, progress: number) => void
 }
 
-export const Timer = forwardRef<TimerRef, TimerProps>(({ className, label, onComplete, onTick }, ref) => {
+export const Timer = forwardRef<TimerRef, TimerProps>(({ className, label }, ref) => {
   const [duration, setDuration] = useState(10) // Default 10 seconds
   const [timeLeft, setTimeLeft] = useState(0)
   const [isRunning, setIsRunning] = useState(false)
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
   const startTimeRef = useRef<number>(0)
   const [smoothProgress, setSmoothProgress] = useState(0)
+  const callbackRef = useRef<(() => void) | null>(null)
 
   const formatTime = (seconds: number) => {
     if (seconds >= 60) {
@@ -34,13 +33,14 @@ export const Timer = forwardRef<TimerRef, TimerProps>(({ className, label, onCom
     return `${seconds}s`
   }
 
-  const start = (newDuration?: number) => {
+  const start = (newDuration?: number, onComplete?: () => void) => {
     if (newDuration !== undefined) {
       setDuration(newDuration)
       setTimeLeft(newDuration)
     } else if (timeLeft === 0) {
       setTimeLeft(duration)
     }
+    callbackRef.current = onComplete || null
     startTimeRef.current = Date.now()
     setIsRunning(true)
   }
@@ -71,14 +71,13 @@ export const Timer = forwardRef<TimerRef, TimerProps>(({ className, label, onCom
         const newTimeLeft = Math.ceil(remaining)
         if (newTimeLeft !== timeLeft) {
           setTimeLeft(newTimeLeft)
-          onTick?.(newTimeLeft, progress)
         }
 
         if (remaining <= 0) {
           setIsRunning(false)
           setTimeLeft(0)
           setSmoothProgress(0)
-          onComplete?.()
+          callbackRef.current?.()
         }
       }, 50) // Update every 50ms for smooth animation
     } else {
@@ -93,7 +92,7 @@ export const Timer = forwardRef<TimerRef, TimerProps>(({ className, label, onCom
         clearInterval(intervalRef.current)
       }
     }
-  }, [isRunning, duration, onComplete, onTick])
+  }, [isRunning, duration])
 
   return (
     <div className={cn("flex gap-3 items-center", className)}>
