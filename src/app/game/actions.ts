@@ -1,4 +1,6 @@
 "use server";
+import { db } from '@/db/db';
+import { rankings } from '@/db/schema';
 import { openai } from '@ai-sdk/openai';
 import { generateObject } from 'ai';
 import { z } from 'zod';
@@ -60,4 +62,13 @@ export const checkAnswer = async (userAnswer: string, botAnswer: string | undefi
   });
 
   return result;
+}
+
+export const createRanking = async (name: string, score: number) => {
+  const playerRanking: typeof rankings.$inferInsert = {
+    name,
+    score,
+  };
+
+  await db.insert(rankings).values(playerRanking);
 }

@@ -13,13 +13,15 @@ import { answerSchema } from "@/lib/validation/answerSchema";
 import { checkAnswer, getCategory } from "./actions";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import WorldRecordDialog from "./world-record-dialog";
 
 type phaseType = "loading" | "roundStart" | "correct" | "incorrect-issame" | "incorrect-iswrong" | "gameEnded";
 
 export default function Game() {
-  const [points, setPoints] = useState<number>(0);
+  const [score, setScore] = useState<number>(0);
   const [categories, setCategories] = useState<{ category: string; answer: string }[]>([]);
   const [phase, setPhase] = useState<phaseType>("loading");
+  const [isRecordFormOpen, setIsRecordFormOpen] = useState(false);
   const timerRef = useRef<TimerRef>(null);
   const currentCategory = categories.at(-1)?.category;
   const botAnswer = categories.at(-1)?.answer;
@@ -32,7 +34,7 @@ export default function Game() {
   else if (phase === "gameEnded") label = "Game over ";
 
   const startGame = async () => {
-    setPoints(0);
+    setScore(0);
     await startRound();
   }
 
@@ -43,7 +45,7 @@ export default function Game() {
 
     setPhase("roundStart");
     handleStart(10, () => {
-      setPhase("gameEnded");
+      handleGameEnded();
     });
   }
 
@@ -53,11 +55,16 @@ export default function Game() {
   }
 
   const handleStart = (duration: number, onComplete: () => void) => {
-    timerRef.current?.start(duration, onComplete)
+    timerRef.current?.start(duration, onComplete);
   }
 
   const handleStop = () => {
-    timerRef.current?.stop()
+    timerRef.current?.stop();
+  }
+
+  const handleGameEnded = () => {
+    setPhase("gameEnded");
+    setIsRecordFormOpen(true);
   }
 
   const handleSubmit = async (data: z.infer<typeof answerSchema>) => {
@@ -68,23 +75,24 @@ export default function Game() {
     console.log(response)
 
     if (!response.isSame && response.isCorrect) {
-      setPoints(prev => prev + 1);
+      setScore(prev => prev + 1);
       setPhase("correct");
       handleStart(5, () => {
-        setPhase("roundStart");
         startRound();
       });
     } else {
-      if (response.isSame) {
-        setPhase("incorrect-issame")
-      } else if (!response.isCorrect) {
-        setPhase("incorrect-iswrong")
+      if (!response.isCorrect) {
+        setPhase("incorrect-iswrong");
       }
-      
+
+      if (response.isSame) {
+        setPhase("incorrect-issame");
+      }
+
       handleStart(5, () => {
-        setPhase("gameEnded");
+        handleGameEnded();
       });
-    } 
+    }
   }
 
   useEffect(() => {
@@ -94,7 +102,7 @@ export default function Game() {
   return (
     <main className="flex flex-col gap-3 container mx-auto px-3 pt-20 md:px-6">
       <section className="flex justify-between items-center">
-        <div className="flex gap-3 p-3 bg-primary text-primary-foreground rounded-md"><Trophy /> Score: {points}</div>
+        <div className="flex gap-3 p-3 bg-primary text-primary-foreground rounded-md"><Trophy /> Score: {score}</div>
         <Timer
           ref={timerRef}
           label={label}
@@ -134,20 +142,22 @@ export default function Game() {
         )}
         {phase === "gameEnded" && (
           <>
-            <p>Game over! The AI said the same answer as you.</p>
-            <p className="text-2xl">Final Score: {points}</p>
+            <p>Every failure is a rehearsal for success.</p>
+            <p className="text-2xl">Final Score: {score}</p>
             <div className="flex flex-col gap-3 justify-center
             sm:flex-row">
               <Button onClick={() => {
                 startGame();
               }}><Play /> PLAY AGAIN</Button>
               <Link href="/">
-                <Button variant="outline"><LogOut /> GO TO TITLE SCREEN</Button>
+                <Button variant="outline" className="w-full sm:w-auto"><LogOut /> GO TO TITLE SCREEN</Button>
               </Link>
             </div>
           </>
         )}
       </div>
+
+      <WorldRecordDialog open={isRecordFormOpen} setOpen={setIsRecordFormOpen} score={score}/>
     </main>
   );
 }

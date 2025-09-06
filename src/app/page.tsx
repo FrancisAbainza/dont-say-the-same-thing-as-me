@@ -1,3 +1,4 @@
+"use server";
 import { Button } from "@/components/ui/button";
 import { Lightbulb, Play, Trophy } from "lucide-react";
 import Image from "next/image";
@@ -10,8 +11,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import { getTopOnePlayer, getTopTenPlayers } from "./actions";
+import LeaderboardDialog from "./leaderboard-dialog";
 
-export default function Home() {
+export default async function Home() {
+  const topOnePlayer = await getTopOnePlayer();
+  const topTenPlayers = await getTopTenPlayers();
+
   return (
     <main className="container mx-auto px-3 pt-20 md:px-6 flex flex-col items-center justify-between">
       <Image src="/logo.png" alt="Logo" width={500} height={500} />
@@ -46,10 +52,12 @@ export default function Home() {
       <div className="flex flex-col gap-6 mt-20 items-center font-medium">
         <div className="flex items-center gap-3">
           <Trophy className="w-12 h-12" />
-          <p>
-            World Record: 547<br />
-            By: John Doe
-          </p>
+          <LeaderboardDialog topPlayers={topTenPlayers}>
+            <p className="cursor-pointer hover:underline">
+              World Record: {topOnePlayer[0].score}<br />
+              By: {topOnePlayer[0].name}
+            </p>
+          </LeaderboardDialog>
         </div>
         <p className="text-center">To be top 1%, you must answer what 99% don't</p>
       </div>

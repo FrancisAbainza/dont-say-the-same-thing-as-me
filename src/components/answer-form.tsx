@@ -20,7 +20,7 @@ export default function AnswerForm({onSubmit}: {onSubmit: (data: z.infer<typeof 
     defaultValues: {
       answer: "",
     },
-  })
+  });
 
   return (
     <Form {...form}>
