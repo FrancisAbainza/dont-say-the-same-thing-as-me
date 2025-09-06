@@ -20,7 +20,7 @@ export default async function Home() {
 
   return (
     <main className="container mx-auto px-3 pt-20 md:px-6 flex flex-col items-center justify-between">
-      <Image src="/logo.png" alt="Logo" width={500} height={500} />
+      <Image src="/logo.png" alt="Logo" width={500} height={500} priority />
       <div className="flex gap-3">
         <Link href="/game">
           <Button>

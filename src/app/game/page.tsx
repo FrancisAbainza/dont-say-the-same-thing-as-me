@@ -111,7 +111,7 @@ export default function Game() {
       </section>
       <Card className="flex flex-col items-center">
         <CardContent className="flex flex-col items-center text-center">
-          <Image src="/character.png" alt="character" width={200} height={200} />
+          <Image src="/character.png" alt="character" width={200} height={200} priority />
           <p>Remember: Don’t say the same thing as me!</p>
           {phase === "loading" && (
             <h1 className="text-4xl font-bold">Waiting for category...</h1>
