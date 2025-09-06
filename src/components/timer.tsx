@@ -92,7 +92,7 @@ export const Timer = forwardRef<TimerRef, TimerProps>(({ className, label }, ref
         clearInterval(intervalRef.current)
       }
     }
-  }, [isRunning, duration])
+  }, [isRunning, duration, timeLeft])
 
   return (
     <div className={cn("flex gap-3 items-center", className)}>

@@ -59,7 +59,7 @@ export default async function Home() {
             </p>
           </LeaderboardDialog>
         </div>
-        <p className="text-center">To be top 1%, you must answer what 99% don't</p>
+        <p className="text-center">To be top 1%, you must answer what 99% don&apos;t</p>
       </div>
     </main>
   );
