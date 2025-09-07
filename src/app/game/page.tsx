@@ -72,7 +72,6 @@ export default function Game() {
     const userAnswer = data.answer;
 
     const response = await checkAnswer(userAnswer, botAnswer, currentCategory);
-    console.log(response)
 
     if (!response.isSame && response.isCorrect) {
       setScore(prev => prev + 1);

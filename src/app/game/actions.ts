@@ -21,16 +21,21 @@ const themes = [
   "Travel & Places",
   "Nature & Environment",
   "Mythology",
-  "Politics & Current Events",
-  "Business & Economics",
-  "Health & Medicine",
   "Fashion & Lifestyle",
   "Gaming",
-  "Languages",
-  "Space & Astronomy",
-  "Riddles & Logic",
   "Animals",
-  "Hobbies"
+  "Hobbies",
+  "Comics & Graphic Novels",
+  "Anime & Manga",
+  "Board Games & Puzzles",
+  "Internet Culture & Memes",
+  "Superheroes & Villains",
+  "Photography",
+  "Dance & Performance Arts",
+  "Children's Literature",
+  "Crafts & DIY",
+  "Automotive & Vehicles",
+  "Magic & Fantasy"
 ];
 
 const answerType = ["ordinary", "ordinary", "ordinary", "obscure"];
@@ -55,10 +60,30 @@ export const checkAnswer = async (userAnswer: string, botAnswer: string | undefi
   const { object: result } = await generateObject({
     model: openai('gpt-4o-mini'),
     schema: z.object({
-      isSame: z.boolean().describe(`Is ${userAnswer} the same as ${botAnswer}? "true" they are the same, "false" they are not the same.`),
-      isCorrect: z.boolean().describe(`Verify is this answer: ${userAnswer} fits this category: ${currentCategory}`),
+      isSame: z.boolean().describe(
+        `Determine if the user's answer is the same as the bot's answer. 
+        Return true if they are equivalent ignoring case and minor variations; 
+        false if they are different. Sysnonyms are considered the same.
+        Examples: "banana" is the same as "Banana", "Washington" is the same as "George Washington". "kicks" is the same as "sneakers".`
+      ),
+      isCorrect: z.boolean().describe(
+        `Determine if the user's answer belongs to the category "${currentCategory}". 
+        Return true if it fits the category, false otherwise.`
+      ),
     }),
-    prompt: `Verify is this answer: ${userAnswer} is correct for a game of "dont say the same thing as me"`,
+    prompt: `You are evaluating a game response.
+    User's answer: "${userAnswer}"
+    Bot's answer: "${botAnswer}"
+    Category: "${currentCategory}"
+  
+    1. Check if the user's answer is the same as the bot's answer.
+    2. Check if the user's answer fits the category.
+  
+    Respond only with a JSON object matching this schema:
+    {
+      "isSame": boolean,
+      "isCorrect": boolean
+    }`
   });
 
   return result;
