@@ -4,7 +4,7 @@ import { rankings } from '@/db/schema';
 import { gateway, generateObject } from 'ai';
 import { z } from 'zod';
 
-const model = gateway('anthropic/claude-opus-4-20250514');
+const model = gateway('anthropic/claude-sonnet-4-20240924');
 
 const themes = [
   "General",
