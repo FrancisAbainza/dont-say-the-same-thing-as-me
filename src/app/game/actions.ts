@@ -1,9 +1,10 @@
 "use server";
 import { db } from '@/db/db';
 import { rankings } from '@/db/schema';
-import { openai } from '@ai-sdk/openai';
-import { generateObject } from 'ai';
+import { gateway, generateObject } from 'ai';
 import { z } from 'zod';
+
+const model = gateway('anthropic/claude-opus-4-20250514');
 
 const themes = [
   "General",
@@ -45,7 +46,7 @@ export const getCategory = async (prevCategories: string[]) => {
   const randomAnswerType = answerType[Math.floor(Math.random() * answerType.length)];
 
   const { object: category } = await generateObject({
-    model: openai('gpt-4o-mini'),
+    model: model,
     schema: z.object({
       category: z.string().describe(`A category about ${randomTheme}, e.g. Name a color`),
       answer: z.string().describe('Your answer to that category, e.g. blue'),
@@ -58,7 +59,7 @@ export const getCategory = async (prevCategories: string[]) => {
 
 export const checkAnswer = async (userAnswer: string, botAnswer: string | undefined, currentCategory: string | undefined) => {
   const { object: result } = await generateObject({
-    model: openai('gpt-4o-mini'),
+    model: model,
     schema: z.object({
       isSame: z.boolean().describe(
         `Determine if the user's answer is the same as the bot's answer. 
