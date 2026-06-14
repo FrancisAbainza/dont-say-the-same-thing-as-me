@@ -4,7 +4,7 @@ import { rankings } from '@/db/schema';
 import { gateway, generateObject } from 'ai';
 import { z } from 'zod';
 
-const model = gateway('anthropic/claude-sonnet-4');
+const model = gateway('gpt-4o-mini');
 
 const themes = [
   "General",
